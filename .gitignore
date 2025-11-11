@@ -1,0 +1,16 @@
+# ...existing code...
+# Node / project
+node_modules/
+dist/
+
+# Env files (never commit secrets)
+.env
+
+# Editor / OS
+.vscode/
+.DS_Store
+
+# Local DB / runtime files
+*.sqlite
+*.sqlite3
+db.sqlite
