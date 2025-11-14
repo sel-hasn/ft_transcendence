@@ -1,28 +1,18 @@
-import Fastify from 'fastify';
-import type { FastifyError, FastifyRequest, FastifyReply } from 'fastify';
-import rootRoutes from './routes/root.ts'
+import buildApp from './app'
+import dotenv from 'dotenv'
 
-const fastify = Fastify({ logger: true});
+dotenv.config();
 
-fastify.register(rootRoutes);
+const PORT = parseInt(process.env.PORT || '3000', 10);
+const HOST = process.env.HOT || '0.0.0.0'
 
-fastify.setErrorHandler((error: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
-    request.log.error(error);
-    const statusCode = error.statusCode || 500;
-    reply.status(statusCode).send({ error: error.message })
-})
-
-const start = async () => {
+async function start() {
     try {
-        await fastify.listen({
-            port: 3000,
-            host: '0.0.0.0'
-        })
-        fastify.log.info('Server is running at http://localhost:3000');
+        const fastify = await buildApp();
+        await fastify.listen({ port: PORT, host: HOST});
+        console.log(`🚀 Server running at http://${HOST}:${PORT}`);
     } catch (err) {
-        fastify.log.error(err);
+        console.error('❌ Server failed to start:', err);
         process.exit(1);
     }
 }
-
-start();
