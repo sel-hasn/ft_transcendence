@@ -10,5 +10,5 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["server.ts", "plugins/**/*.ts"]
+  "include": ["server.ts", "plugins/**/*.ts", "routes/root.ts"]
 }

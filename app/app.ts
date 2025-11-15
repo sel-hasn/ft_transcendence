@@ -17,7 +17,6 @@ async function buildApp() {
         return { status: 'ok', timestamp: new Date().toISOString() };
     });
 
-
     return fastify;
 }
 
