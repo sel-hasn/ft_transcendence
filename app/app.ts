@@ -1,7 +1,7 @@
-import Fastify from 'fastify';
-import authPlugin from './plugins/auth'
 import databasePlugin from './plugins/database'
+// import authPlugin from './plugins/auth'
 import userRouts from './routes/users'
+import Fastify from 'fastify';
 
 
 
@@ -9,7 +9,7 @@ async function buildApp() {
     const fastify = Fastify({ logger: true});
 
     await fastify.register(databasePlugin);
-    await fastify.register(authPlugin);
+    // await fastify.register(authPlugin);
 
     await fastify.register(userRouts);
 
