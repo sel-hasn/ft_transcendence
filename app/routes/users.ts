@@ -60,8 +60,9 @@ export async function userRouts(fastify: FastifyInstance) {
                 ).get(email, username) as {id: number; email: string; username: string} | undefined;
 
                 if (existingUser) {
+                    const conflictField = existingUser.username === username ? 'username':'email';
                     return reply.code(409).send({
-                        error: 'User already exists',
+                        error: `User with this ${conflictField} already exists`,
                     });
                 }
 
