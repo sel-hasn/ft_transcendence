@@ -1,13 +1,37 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { UserCreatePayload, UserLoginPayload } from '../types';
 import { hashPassword, verifyPassword } from '../utils/password';
+import { RegisterSchema, LoginSchema, RegisterSchemaType, LoginSchemaType } from '../schemas/auth.schemas'
 
 export async function userRouts(fastify: FastifyInstance) {
     // Creat new user
     fastify.route({
         method: 'POST',
         url: '/api/auth/register',
-        handler: async (request: FastifyRequest<{ Body: UserCreatePayload }>, reply: FastifyReply) => {
+        schema: {
+            body: RegisterSchema,
+            response: {
+                201: {
+                    description: 'User registered successfully',
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' },
+                        user: {
+                            id: { type: 'number' },
+                            username: { type: 'string' },
+                            email: 'string',
+                        }
+                    }
+                },
+                400: {
+                    description: 'Bad request - validation error',
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string' }
+                    }
+                }
+            }
+        },
+        handler: async (request: FastifyRequest<{ Body: RegisterSchemaType }>, reply: FastifyReply) => {
             try {
                 const { username, email, password, password_confirmation } = request.body;
                 

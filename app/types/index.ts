@@ -8,15 +8,3 @@ export interface User {
     created_at: string;
     updated_at: string;
 }
-
-export interface UserCreatePayload {
-    username: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
-}
-
-export interface UserLoginPayload {
-    identifier: string; // email or username,
-    password: string;
-}
