@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { hashPassword, verifyPassword } from '../utils/password';
 import { RegisterSchema, LoginSchema, RegisterSchemaType, LoginSchemaType } from '../schemas/auth.schemas'
 import { request } from 'http';
+import { email } from 'zod';
 
 export async function userRouts(fastify: FastifyInstance) {
     // Creat new user
@@ -142,7 +143,33 @@ export async function userRouts(fastify: FastifyInstance) {
                     password_hash: string
                 } | undefined;
 
+                if (!user) {
+                    return reply.code(401).send({
+                        error: 'Invalid credentials'
+                    });
+                }
+
+                const isVallidPassword = await verifyPassword(password, user.password_hash);
                 
+                if (!isVallidPassword) {
+                    return reply.code(401).send({
+                        error: 'Invalid credentials'
+                    })
+                }
+
+                return reply.code(200).send({
+                    messsage: 'Login successful',
+                    user: {
+                        id: user.id,
+                        username: user.username,
+                        email: user.email
+                    }
+                });
+            } catch (err) {
+                fastify.log.error(err);
+                return reply.code(500).send({
+                    error: 'Internal server error. Please try again later.'
+                })
             }
         }
     })
