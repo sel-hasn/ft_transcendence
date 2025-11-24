@@ -1,10 +1,8 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { hashPassword, verifyPassword } from '../utils/password';
 import { RegisterSchema, LoginSchema, RegisterSchemaType, LoginSchemaType } from '../schemas/auth.schemas'
-import { request } from 'http';
-import { email } from 'zod';
 
-export async function userRouts(fastify: FastifyInstance) {
+async function userRoutes(fastify: FastifyInstance) {
     // Creat new user
     fastify.route({
         method: 'POST',
@@ -174,3 +172,5 @@ export async function userRouts(fastify: FastifyInstance) {
         }
     })
 }
+
+export default userRoutes;

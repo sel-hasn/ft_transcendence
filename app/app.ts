@@ -1,7 +1,7 @@
 import databasePlugin from './plugins/database'
 import cookiePlugin from '@fastify/cookie';
-import authPlugin from './plugins/auth'
-import userRouts from './routes/users'
+// import authPlugin from './plugins/auth'
+import userRoutes from './routes/users'
 import Fastify from 'fastify';
 
 
@@ -12,12 +12,12 @@ async function buildApp() {
 	// Register Plugins
 	// ============================================================
 	await fastify.register(databasePlugin);
-	await fastify.register(authPlugin);
+	// await fastify.register(authPlugin);
 
 	// ============================================================
 	// Register Routes
 	// ============================================================
-	await fastify.register(userRouts);
+	await fastify.register(userRoutes);
 
 	// ============================================================
 	// Health Check Route
