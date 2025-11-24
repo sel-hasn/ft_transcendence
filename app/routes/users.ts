@@ -28,18 +28,26 @@ export async function userRouts(fastify: FastifyInstance) {
                     properties: {
                         error: { type: 'string' }
                     }
+                },
+                409: {
+                    description: 'Conflict - user already exists',
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string' }
+                    }
+                },
+                500: {
+                    description: 'Internal server error',
+                    type: 'object',
+                    properties: {
+                        error: { type: 'string' }
+                    }
                 }
             }
         },
         handler: async (request: FastifyRequest<{ Body: RegisterSchemaType }>, reply: FastifyReply) => {
             try {
                 const { username, email, password, password_confirmation } = request.body;
-                
-                if (!username || !email || !password || !password_confirmation) {
-                    return reply.code(400).send({
-                        error: 'Missing required fields: username, email, password, password_confirmation',
-                    });
-                }
 
                 if (password !== password_confirmation) {
                     return reply.code(400).send({
@@ -47,7 +55,9 @@ export async function userRouts(fastify: FastifyInstance) {
                     });
                 }
 
-                const existingUser = fastify.db.prepare('SELECT id FROM users WHERE email = ? OR username = ?').get(email, username);
+                const existingUser = fastify.db.prepare(
+                    'SELECT id, email, username FROM users WHERE email = ? OR username = ?'
+                ).get(email, username) as {id: number; email: string; username: string} | undefined;
 
                 if (existingUser) {
                     return reply.code(409).send({
